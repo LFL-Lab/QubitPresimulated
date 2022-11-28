@@ -4,9 +4,9 @@ Library of premade qubits made in Qiskit Metal. Ask for a set of target paramete
 ## To Do
 1. Make a few base classes which outline how to select
   -  `Library`
-    - .csv of all the qubits we've simulated 
+      - .csv of all the qubits we've simulated 
   -  `QubitSelector`
-    - Input: Target parameters associated w/ the qubit, and style of qubit
-    - Output: Dictionary of qubit options (in the format of qiskit metal)
+      - Input: Target parameters associated w/ the qubit, and style of qubit
+      - Output: Dictionary of qubit options (in the format of qiskit metal)
     
 
