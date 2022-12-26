@@ -16,7 +16,7 @@ class QLibrarian:
     
 
     #### Section 1: Using your data to do things!
-    def find_best_match(self, target_parameters):
+    def find_best_match(self, target_parameters: dict):
         """
         TODO:
         Fix row['geometry'], I want it to give me all the qcomponent.options
@@ -39,7 +39,7 @@ class QLibrarian:
                 best_match = row['geometry']
         return best_match
     
-    def update_qcomponent(qcomponent_options, dictionary):
+    def update_qcomponent(qcomponent_options: dict, dictionary):
         '''
         Given a qcomponent.options dictionary,
         Update it based on an input dictionary
@@ -47,7 +47,7 @@ class QLibrarian:
         for key, value in dictionary.items():
             if key in qcomponent_options:
                 if type(value) == dict:
-                    update_dict(qcomponent_options[key], value)
+                    self.update_qcomponent(qcomponent_options[key], value)
                 else:
                     qcomponent_options[key] = value
             else:
@@ -56,6 +56,29 @@ class QLibrarian:
 
     #### Section 2: Gathering data 
     # TODO: Create add_data
+
+    def from_qoptions(self, dictionary):
+        '''
+        Turns a nested dictionary w/ values and 
+        appends it to self.data. 
+
+        Use it to quickly get qcomponent.options 
+        I.e. dicionary = qcomponent.options
+
+        Input:
+        * dictionary (dict) - qcomponent.options dictionary
+
+        Output:
+        * df (pd.DataFrame) - updated self.data
+        '''
+        df = self.data
+        for key, value in dictionary.items():
+            if isinstance(value, dict):
+                nested_df = self.from_qoptions(value)
+                df = nested_df
+            else:
+                df[key] = [value]
+        return df   
 
 
     #### Section 3: Remembering data
