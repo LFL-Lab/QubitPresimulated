@@ -40,20 +40,6 @@ class QLibrarian:
                 best_match = row['geometry']
         return best_match
     
-    def update_qcomponent(self, qcomponent_options: dict, dictionary):
-        '''
-        Given a qcomponent.options dictionary,
-        Update it based on an input dictionary
-        '''
-        for key, value in dictionary.items():
-            if key in qcomponent_options:
-                if type(value) == dict:
-                    self.update_qcomponent(qcomponent_options[key], value)
-                else:
-                    qcomponent_options[key] = value
-            else:
-                qcomponent_options[key] = value
-    
 
     #### Section 2: Gathering data 
 
