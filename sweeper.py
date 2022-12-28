@@ -1,8 +1,9 @@
 from QubitPresimulated.librarian import QLibrarian
-from itertools import product
-# from qiskit_metal.analyses.simulation import ScatteringImpedanceSim
-# from qiskit_metal.analyses.quantization import EPRanalysis
-# from qiskit_metal.analyses.quantization import LOManalysis
+from QubitPresimulated.sweeper_helperfunctions import extract_QSweep_parameters
+from qiskit_metal.analyses.simulation import ScatteringImpedanceSim
+from qiskit_metal.analyses.quantization import EPRanalysis
+from qiskit_metal.analyses.quantization import LOManalysis
+from tqdm import tqdm # creates cute progress bar
 
 
 class QSweeper:
@@ -11,6 +12,7 @@ class QSweeper:
 
     def __init__(self, analysis):
         self.analysis = analysis
+        self.all_simulations = []
 
     def run_sweep(self, component_name, parameters):
         """
@@ -30,40 +32,44 @@ class QSweeper:
         5. cross_length: 2 cross_gap: 5
         6. cross_length: 2 cross_gap: 6
         """
+        # Clear self.all_simulations log
+        self.all_simulations = []
 
         # Define some useful objects
         design = self.analysis.sim.design
         component = self.components[component_name]
-        qoptions = self.component.options
+        all_combo_parameters = extract_QSweep_parameters(parameters)
 
+        # Select a analysis type
+        if (type(self.analysis) == LOManalysis):
+            run_analysis = self.run_LOManlaysis
+        elif (type(self.analysis) == EPRanalysis):
+            run_analysis = self.run_EPRanlaysis
+        elif (type(self.analysis) == ScatteringImpedanceSim):
+            run_analysis = self.run_ScatteringImpedanceSim
+        else:
+            raise ValueError('Analysis type is not currently supported.')
         
 
-        # Get all combinations of the options and values
-        
-                
-                # Update QComponent referenced by 'component_name'
-                self.update_qcomponent(qoptions, {option : value})
-                self.component.rebuild()
+        # Get all combinations of the options and values, w/ `tqdm` progress bar
+        for combo_parameter in tqdm(all_combo_parameters):
+            # Update QComponent referenced by 'component_name'
+            component.options = self.update_qcomponent(component.options, combo_parameter)
+            component.rebuild()
+            
 
-                self.analysis.run()
-                print({option: value})
+            # Run the analysis
+            self.analysis.run()
 
+            # Parse through data from the analysis
+            run_analysis(component_name, parameters, kwargs)
 
+            # Autosave data to .csv
 
+            # Append data to QSweeper
+            self.all_simulations.append(self.analysis)
+            
 
-
-
-
-
-        # if (type(self.analysis) == LOManalysis):
-        #     self.run_LOManlaysis(component_name, parameters, kwargs)
-        # elif (type(self.analysis) == EPRanalysis):
-        #     self.run_EPRanlaysis(component_name, parameters, kwargs)
-        # elif (type(self.analysis) == ScatteringImpedanceSim):
-        #     self.run_ScatteringImpedanceSim(component_name, parameters, kwargs)
-        # else:
-        #     raise ValueError('Analysis type is not currently supported.')
-        
     def run_LOManlaysis(self, component_name, parameters: dict, **kwargs):
         '''
         
@@ -91,6 +97,8 @@ class QSweeper:
                     qcomponent_options[key] = value
             else:
                 qcomponent_options[key] = value
+    
+        return qcomponent_options
 
 
     

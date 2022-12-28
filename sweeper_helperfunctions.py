@@ -25,6 +25,8 @@ print(extract_QSweep_parameters(options))
 # {'cross_length': 2, 'claw_options': {'claw_a': 3}},
 # {'cross_length': 2, 'claw_options': {'claw_a': 4}}]
 
+TODO: There's definitely a more elegant way of doing this
+    I'm just not sure how to do it at the moment.
 '''
 
 def extract_QSweep_parameters(parameters: dict):
