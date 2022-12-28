@@ -44,7 +44,7 @@ class QLibrarian:
     #### Section 2: Gathering data 
 
     # Append qcomponent.options to self.qoptions_data
-    def from_qoptions(self, dictionary):
+    def from_dict(self, dictionary, df):
         '''
         Get data in the format of QComponent.options
         Append it to a pandas DataFrame
@@ -58,11 +58,11 @@ class QLibrarian:
         Entries below each column are associated w/ the deepest value of the nested dict.
         '''
         keys, values = self.extract_keysvalues(dictionary)
-        self.qoptions_data = self.qoptions_data.append(dict(zip(keys, values)), ignore_index=True)
+        df = df.append(dict(zip(keys, values)), ignore_index=True)
 
     def extract_keysvalues(self, dictionary, parent_key=''):
         '''
-        Helper method for self.from_qoptions
+        Helper method for self.from_dict
         Not used for front end.
 
         Inputs:
@@ -129,10 +129,16 @@ class QLibrarian:
         self.qoptions_data = combined_df.iloc[:, :combined_df.columns.get_loc(' ')]
         self.simulation_data = combined_df.iloc[:, combined_df.columns.get_loc(' ')+1:]
     
-    def write_csv(self, filepath=None):
+    def write_csv(self, filepath=None, mode='a', **kwargs):
         '''
         Write self.qoptions_data and self.simulation_data to .csv
         Defaults to ./draft_presimulated
+
+        Puts an empty column inbetween the qoptions_data and simulation_data
+
+        Inputs:
+        * filepath (str)
+        * mode (str, optional)
         '''
         # Default to date & time name
         if (file_path == None):
@@ -149,4 +155,4 @@ class QLibrarian:
         combined_df = pd.concat([self.qoptions_data, pd.DataFrame(columns=[' ']), self.simulation_data], axis=1)
         
         # Write the combined DataFrame to a CSV file
-        combined_df.to_csv(file_path, index=False)
+        combined_df.to_csv(file_path, index=False, mode='a', **kwargs)
