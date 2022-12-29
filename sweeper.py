@@ -65,7 +65,7 @@ class QSweeper:
         for combo_parameter in tqdm(all_combo_parameters):
             # Update QComponent referenced by 'component_name'
             component.options = self.update_qcomponent(component.options, combo_parameter)
-            component.rebuild()
+            design.rebuild()
 
             # Run the analysis
             self.analysis.run()
