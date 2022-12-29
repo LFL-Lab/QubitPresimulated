@@ -47,7 +47,7 @@ class QSweeper:
 
         # Define some useful objects
         design = self.analysis.sim.design
-        component = self.components[component_name]
+        component = design.components[component_name]
         all_combo_parameters = extract_QSweep_parameters(parameters)
 
         # Select a analysis type
@@ -99,8 +99,6 @@ class QSweeper:
     def run_ScatteringImpedanceSim(self, data_name):
         all_data = self.analysis.get_data()
         return all_data
-
-
 
     def update_qcomponent(self, qcomponent_options: dict, dictionary):
         '''
