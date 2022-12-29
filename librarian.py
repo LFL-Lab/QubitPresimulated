@@ -15,7 +15,7 @@ class QLibrarian:
     '''
     def __init__(self):
         self.qoptions_data = pd.DataFrame()
-        self.simulation_data = pd.DataFrame()
+        self.simulations_data = pd.DataFrame()
         self.default_save_directory = 'QubitPresimulated/draft_presimulated/'
     
 
@@ -33,10 +33,10 @@ class QLibrarian:
         """
         best_match = None
         min_error = float('inf')
-        for i, row in self.simulation_data.iterrows():
+        for i, row in self.simulations_data.iterrows():
             error = 0
             for param, target_value in target_parameters.items():
-                if param in self.simulation_data.columns:
+                if param in self.simulations_data.columns:
                     error += (row[param] - target_value)**2
             if error < min_error:
                 min_error = error
@@ -67,7 +67,7 @@ class QLibrarian:
         if (target_df == 'qoption'):
             self.qoptions_data = self.qoptions_data.append(dict(zip(keys, values)), ignore_index=True)
         else:
-            self.simulation_data = self.simulation_data.append(dict(zip(keys, values)), ignore_index=True)
+            self.simulations_data = self.simulations_data.append(dict(zip(keys, values)), ignore_index=True)
         
     def extract_keysvalues(self, dictionary, parent_key=''):
         '''
@@ -127,26 +127,25 @@ class QLibrarian:
 
 
     #### Section 3: Remembering data
-    @staticmethod
-    def read_csv(filepath):
+    def read_csv(self, filepath):
         '''
-        Read in a .csv and split it into self.qoptions_data and self.simulation_data
+        Read in a .csv and split it into self.qoptions_data and self.simulations_data
         '''
         # Read the combined DataFrame from the CSV file
         combined_df = pd.read_csv(filepath)
         
         # Split the combined DataFrame into the two separate DataFrames
         QLibrarian.qoptions_data = combined_df.iloc[:, :combined_df.columns.get_loc(' ')]
-        QLibrarian.simulation_data = combined_df.iloc[:, combined_df.columns.get_loc(' ')+1:]
+        QLibrarian.simulations_data = combined_df.iloc[:, combined_df.columns.get_loc(' ')+1:]
 
-        return QLibrarian.qoptions_data, QLibrarian.simulation_data
+        return combined_df
     
-    def write_csv(self, filepath=None, mode='a', **kwargs):
+    def export_csv(self, filepath=None, mode='a', **kwargs):
         '''
-        Write self.qoptions_data and self.simulation_data to .csv
+        Write self.qoptions_data and self.simulations_data to .csv
         Defaults to ./draft_presimulated
 
-        Puts an empty column inbetween the qoptions_data and simulation_data
+        Puts an empty column inbetween the qoptions_data and simulations_data
 
         Inputs:
         * filepath (str)
@@ -160,7 +159,28 @@ class QLibrarian:
             filepath = 'testing_{date_string}.csv'
         
         # Combine the two DataFrames and add an empty column between them
-        combined_df = pd.concat([self.qoptions_data, pd.DataFrame(columns=[' ']), self.simulation_data], axis=1)
+        combined_df = pd.concat([self.qoptions_data, pd.DataFrame(columns=[' ']), self.simulations_data], axis=1)
         
         # Write the combined DataFrame to a CSV file
         combined_df.to_csv(filepath, index=False, mode=mode, **kwargs)
+
+    @staticmethod
+    def append_csv(qoption_data, simulation_data, filepath=None):
+        '''
+        Static verison of `self.write_csv`
+
+        Usage: when you want to append one line of data at a time
+            to long term storage (.csv)
+        '''
+        # Default to date & time name
+        if (filepath == None):
+            now = datetime.datetime.now()
+            date_string = now.strftime("%Y-%m-%d")
+    
+            filepath = 'testing_{date_string}.csv'
+        
+        # Combine the two DataFrames and add an empty column between them
+        combined_df = pd.concat([qoption_data, pd.DataFrame(columns=[' ']), simulation_data], axis=1)
+        
+        # Write the combined DataFrame to a CSV file
+        combined_df.to_csv(filepath, index=False, mode='a', header=False)

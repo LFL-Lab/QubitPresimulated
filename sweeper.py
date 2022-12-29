@@ -66,7 +66,7 @@ class QSweeper:
             component.options = self.update_qcomponent(component.options, combo_parameter)
             design.rebuild()
 
-            # Run the analysis
+            # Run the analysis, extract important data
             data = run_analysis(data_name, **kwargs)
 
             # Log QComponent.options and data from analysis
@@ -74,9 +74,9 @@ class QSweeper:
             self.librarian.from_dict(data, 'simulation')
 
             # Save this data to a csv
-            self.librarian.write_csv(filepath = save_path, mode='a')
+            QLibrarian.append_csv(component.options, data, filepath = save_path)
 
-            # Tell me what you finished
+            # Tell me this iteration is finished
             print('Simulated and logged configuration: {}'.format(combo_parameter))
 
             # Append full result to QSweeper.full_simulations
