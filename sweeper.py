@@ -74,7 +74,10 @@ class QSweeper:
             self.librarian.from_dict(data, 'simulation')
 
             # Save this data to a csv
-            QLibrarian.append_csv(component.options, data, filepath = save_path)
+            newest_qoption = self.librarian.qoptions_data.tail(n=1)
+            newest_simulation = self.librarian.simulations_data.tail(n=1)
+            
+            QLibrarian.append_csv(newest_qoption, newest_simulation, filepath = save_path)
 
             # Tell me this iteration is finished
             print('Simulated and logged configuration: {}'.format(combo_parameter))

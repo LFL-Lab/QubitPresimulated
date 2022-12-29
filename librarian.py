@@ -165,7 +165,7 @@ class QLibrarian:
         combined_df.to_csv(filepath, index=False, mode=mode, **kwargs)
 
     @staticmethod
-    def append_csv(qoption_data: dict, simulation_data: dict, filepath=None):
+    def append_csv(qoption_data, simulation_data, filepath=None):
         '''
         Static verison of `self.write_csv`
 
@@ -173,12 +173,12 @@ class QLibrarian:
             to long term storage (.csv) located at `filepath`
         
         Inputs:
-        * qoption_data (dict)
-        * simulation_data (dict)
+        * qoption_data (pd.DataFrame)
+        * simulation_data (pd.DataFrame)
         '''
-        # Turn inputs into pd.DataFrames
-        qoption_data = pd.DataFrame(qoption_data)
-        simulation_data = pd.DataFrame(simulation_data)
+        # Check for pd.DataFrames
+        if not isinstance(qoption_data, pd.DataFrame) or isinstance(simulation_data, pd.DataFrame):
+            raise TypeError('qoption_data and simulation_data must have type pd.DataFrame')
 
         # Default to date & time name
         if (filepath == None):
