@@ -40,7 +40,7 @@ def extract_QSweep_parameters(parameters: dict):
         as your input. But you'll have each combination.
     '''
     ext_parameters = extract_parameters(parameters)
-    values = extract_values(ext_parameters)
+    values = extract_values(parameters)
     combo = generate_combinations(values)
     list_of_combos = create_dict_list(ext_parameters, combo)
     return list_of_combos
@@ -74,30 +74,31 @@ def extract_parameters(dictionary, keys=None, prefix=''):
         return keys
 
 def extract_values(dictionary, values=None):
-        '''
-        Extract values in nested dict
-        For our purposes, gets the initial guesses associated w/ self.parameters
+    '''
+    Extract values in nested dict
+    For our purposes, gets the initial guesses associated w/ self.parameters
 
-        Input:
-        * dictionary (dict)
+    Input:
+    * dictionary (dict)
 
-        Output:
-        * values (list of ...)
+    Output:
+    * values (list of string)
 
-        Example:
-        my_dict = {'transmon1': {'cross_width': '30um', 
-                                 'connection_pads': {'readout': {'pad_width': '200um'}}}}
-        print(extract_values(my_dict))
-        # prints: ['30um', '200um']
-        '''
-        if values is None:
-            values = []
-        for key, value in dictionary.items():
-            if isinstance(value, dict):
-                extract_values(value, values)
-            else:
-                values.append(value)
-        return values
+    Example:
+    my_dict = {'transmon1': {'cross_width': '30um', 
+                                'connection_pads': {'readout': {'pad_width': '200um'}}}}
+    print(extract_values(my_dict))
+    # prints: ['30um', '200um']
+    '''
+    if values is None:
+        values = []
+    for key, value in dictionary.items():
+        if isinstance(value, dict):
+            extract_values(value, values)
+        else:
+            values.append(value)
+    return values
+
 
 def generate_combinations(lists):
     '''
@@ -117,30 +118,47 @@ def generate_combinations(lists):
     return combinations
 
 def create_dict_list(keys, values):
-    ''''
-    Takes in a list of strings (keys) and a list of values, 
-    and returns a list of nested dictionaries where `.`
-    in the string references the level of nesting.
+  ''''
+  Takes in a list of strings (keys) and a list of values, 
+  and returns a list of nested dictionaries where `.`
+  in the string references the level of nesting.
 
-    Input: 
-    * keys (list of strings) - A list of strings representing 
-        the keys for the dictionaries.
-    * values (list) - A list of values to be used as the 
-        values for the dictionaries
+  Input: 
+  * keys (list of strings) - A list of strings representing 
+      the keys for the dictionaries.
+  * values (list) - A list of values to be used as the 
+      values for the dictionaries
 
-    Output:
-    * dict_list (list of nested dictionaries) - A list of 
-        nested dictionaries where each dictionary has the 
-        keys as its keys and the values as its values.
-    '''
-    dict_list = []
-    for vals in values:
-        nested_dict = create_nested_dict(keys)
-        d = nested_dict
-        for i, key in enumerate(keys):
-            parts = key.split('.')
-            for part in parts[:-1]:
-                d = d[part]
-            d[parts[-1]] = vals[i]
-        dict_list.append(nested_dict)
-    return dict_list
+  Output:
+  * dict_list (list of nested dictionaries) - A list of 
+      nested dictionaries where each dictionary has the 
+      keys as its keys and the values as its values.
+  '''
+  # Initialize an empty list to store the dictionaries
+  dict_list = []
+
+  # Iterate over the values
+  for vals in values:
+    # Create an empty dictionary to store the nested dictionaries
+    nested_dict = {}
+
+    # Iterate over the keys and values
+    for i, key in enumerate(keys):
+      # Split the key into parts
+      parts = key.split('.')
+      # Initialize a reference to the dictionary at the top level
+      d = nested_dict
+      # Iterate over the parts, except for the last one
+      for part in parts[:-1]:
+        # If the part does not exist in the dictionary, create an empty dictionary
+        if part not in d:
+          d[part] = {}
+        # Update the reference to the inner dictionary
+        d = d[part]
+      # Set the value of the last part to the corresponding value
+      d[parts[-1]] = vals[i]
+
+    # Append the nested dictionary to the list
+    dict_list.append(nested_dict)
+
+  return dict_list
