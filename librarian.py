@@ -160,4 +160,4 @@ class QLibrarian:
         combined_df = pd.concat([self.qoptions_data, pd.DataFrame(columns=[' ']), self.simulation_data], axis=1)
         
         # Write the combined DataFrame to a CSV file
-        combined_df.to_csv(file_path, index=False, mode=mode, **kwargs)
+        combined_df.to_csv(filepath = file_path, index=False, mode=mode, **kwargs)

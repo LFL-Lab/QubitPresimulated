@@ -74,8 +74,8 @@ class QSweeper:
             data = get_data(data_name)
 
             # Log QComponent.options and data from analysis
-            Librarian.from_dict(component.options, Librarian.qoptions_data)
-            Librarian.from_dict(data, Librarian.simulation_data)
+            Librarian.from_dict(component.options, 'qoption')
+            Librarian.from_dict(data, 'simulation')
 
             # Save this data to a csv
             Librarian.write_csv(filepath = save_path, mode='a')
