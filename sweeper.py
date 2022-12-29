@@ -80,7 +80,8 @@ class QSweeper:
             print('Simulated and logged configuration: {}'.format(combo_parameter))
 
             # Append full result to QSweeper.full_simulations
-            self.full_simulations.append(self.analysis)
+            full_QAnalysis = self.analysis
+            self.full_simulations.append(full_QAnalysis)
 
         return self.librarian
             
