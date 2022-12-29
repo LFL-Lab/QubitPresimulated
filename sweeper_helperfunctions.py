@@ -40,7 +40,7 @@ def extract_QSweep_parameters(parameters: dict):
         as your input. But you'll have each combination.
     '''
     ext_parameters = extract_parameters(parameters)
-    values = extract_guess(ext_parameters)
+    values = extract_values(ext_parameters)
     combo = generate_combinations(values)
     list_of_combos = create_dict_list(ext_parameters, combo)
     return list_of_combos
