@@ -85,6 +85,11 @@ class QSweeper:
 
             # Append full result to QSweeper.full_simulations
             self.full_simulations.append(self.analysis)
+        
+        
+        self.simulation_Librarian = Librarian
+
+        return Librarian
             
 
     # TODO: Might be able to get rid of these, but not sure yet...

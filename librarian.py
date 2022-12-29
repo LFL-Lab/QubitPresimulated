@@ -146,16 +146,12 @@ class QLibrarian:
         # Default to date & time name
         if (file_path == None):
             now = datetime.datetime.now()
-            date_string = now.strftime("%Y-%m-%d-%H-%M-%S")
-
-            # and it will go into self.default_save_directory
-            if not os.path.exists(self.default_save_directory):
-                os.mkdir(self.default_save_directory)
+            date_string = now.strftime("%Y-%m-%d")
     
-            file_path = self.default_save_directory + 'draft_{date_string}.csv'
+            file_path = 'testing_{date_string}.csv'
         
         # Combine the two DataFrames and add an empty column between them
         combined_df = pd.concat([self.qoptions_data, pd.DataFrame(columns=[' ']), self.simulation_data], axis=1)
         
         # Write the combined DataFrame to a CSV file
-        combined_df.to_csv(file_path, index=False, mode='a', **kwargs)
+        combined_df.to_csv(file_path, index=False, mode=mode, **kwargs)
