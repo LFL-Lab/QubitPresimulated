@@ -176,10 +176,6 @@ class QLibrarian:
         * qoption_data (pd.DataFrame)
         * simulation_data (pd.DataFrame)
         '''
-        # Check for pd.DataFrames
-        if not isinstance(qoption_data, pd.DataFrame) or isinstance(simulation_data, pd.DataFrame):
-            raise TypeError('qoption_data and simulation_data must have type pd.DataFrame')
-
         # Default to date & time name
         if (filepath == None):
             now = datetime.datetime.now()
