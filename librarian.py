@@ -127,7 +127,8 @@ class QLibrarian:
 
 
     #### Section 3: Remembering data
-    def read_csv(self, filepath):
+    @staticmethod
+    def read_csv(filepath):
         '''
         Read in a .csv and split it into self.qoptions_data and self.simulation_data
         '''
@@ -135,8 +136,10 @@ class QLibrarian:
         combined_df = pd.read_csv(filepath)
         
         # Split the combined DataFrame into the two separate DataFrames
-        self.qoptions_data = combined_df.iloc[:, :combined_df.columns.get_loc(' ')]
-        self.simulation_data = combined_df.iloc[:, combined_df.columns.get_loc(' ')+1:]
+        QLibrarian.qoptions_data = combined_df.iloc[:, :combined_df.columns.get_loc(' ')]
+        QLibrarian.simulation_data = combined_df.iloc[:, combined_df.columns.get_loc(' ')+1:]
+
+        return QLibrarian.qoptions_data, QLibrarian.simulation_data
     
     def write_csv(self, filepath=None, mode='a', **kwargs):
         '''
