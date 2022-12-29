@@ -138,7 +138,7 @@ class QLibrarian:
         self.qoptions_data = combined_df.iloc[:, :combined_df.columns.get_loc(' ')]
         self.simulation_data = combined_df.iloc[:, combined_df.columns.get_loc(' ')+1:]
     
-    def write_csv(self, file_path=None, mode='a', **kwargs):
+    def write_csv(self, filepath=None, mode='a', **kwargs):
         '''
         Write self.qoptions_data and self.simulation_data to .csv
         Defaults to ./draft_presimulated
@@ -150,14 +150,14 @@ class QLibrarian:
         * mode (str, optional)
         '''
         # Default to date & time name
-        if (file_path == None):
+        if (filepath == None):
             now = datetime.datetime.now()
             date_string = now.strftime("%Y-%m-%d")
     
-            file_path = 'testing_{date_string}.csv'
+            filepath = 'testing_{date_string}.csv'
         
         # Combine the two DataFrames and add an empty column between them
         combined_df = pd.concat([self.qoptions_data, pd.DataFrame(columns=[' ']), self.simulation_data], axis=1)
         
         # Write the combined DataFrame to a CSV file
-        combined_df.to_csv(filepath = file_path, index=False, mode=mode, **kwargs)
+        combined_df.to_csv(filepath = filepath, index=False, mode=mode, **kwargs)
