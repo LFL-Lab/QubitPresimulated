@@ -14,7 +14,7 @@ class QSweeper:
         self.analysis = analysis
         self.full_simulations = []
         
-    def run_sweep(self, component_name: str, parameters: dict, data_name: str = None, save_path = None):
+    def run_sweep(self, component_name: str, parameters: dict, data_name: str = None, save_path = None, **kwargs):
         """
         Runs self.analysis.run_sweep() for all combinations of the options and values in the `parameters` dictionary.
 
@@ -24,7 +24,7 @@ class QSweeper:
             The keys are the options (strings), and the values are lists of floats.
         * data_name (str, optional) - Label to query for data. If not specified, the entire
             dictionary is returned. Defaults to None.
-        *
+        * kwargs - parameters associated w/ QAnalysis.run()
         
         Output:
         * Librarian (QLibrarian)- 
@@ -52,11 +52,11 @@ class QSweeper:
 
         # Select a analysis type
         if (type(self.analysis) == LOManalysis):
-            get_data = self.run_LOManlaysis
+            run_analysis = self.run_LOManlaysis
         elif (type(self.analysis) == EPRanalysis):
-            get_data = self.run_EPRanlaysis
+            run_analysis = self.run_EPRanlaysis
         elif (type(self.analysis) == ScatteringImpedanceSim):
-            get_data = self.run_ScatteringImpedanceSim
+            run_analysis = self.run_ScatteringImpedanceSim
         else:
             raise ValueError('Analysis type is not currently supported.')
         
@@ -68,10 +68,7 @@ class QSweeper:
             design.rebuild()
 
             # Run the analysis
-            self.analysis.run()
-
-            # Parse through data from the analysis
-            data = get_data(data_name)
+            data = run_analysis(data_name, **kwargs)
 
             # Log QComponent.options and data from analysis
             Librarian.from_dict(component.options, 'qoption')
@@ -93,15 +90,17 @@ class QSweeper:
             
 
     # TODO: Might be able to get rid of these, but not sure yet...
-    def run_LOManlaysis(self, data_name):
+    def run_LOManlaysis(self, data_name, **kwargs):
         all_data = self.analysis.get_data()
         return all_data
     
-    def run_EPRanlaysis(self, data_name):
+    def run_EPRanlaysis(self, data_name, **kwargs):
+        self.analysis.sim.run(**kwargs)
+        self.analysis.run_epr()
         all_data = self.analysis.get_data()
         return all_data
     
-    def run_ScatteringImpedanceSim(self, data_name):
+    def run_ScatteringImpedanceSim(self, data_name, **kwargs):
         all_data = self.analysis.get_data()
         return all_data
 
