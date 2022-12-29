@@ -12,7 +12,6 @@ class QSweeper:
 
     def __init__(self, analysis,):
         self.analysis = analysis
-        self.full_simulations = []
         
     def run_sweep(self, component_name: str, parameters: dict, data_name: str = None, save_path = None, **kwargs):
         """
@@ -42,8 +41,8 @@ class QSweeper:
         # Clear self.full_simulations log
         self.full_simulations = []
 
-        # Initalize QLibrarian for output
-        Librarian = QLibrarian()
+        # Clear simulations library
+        self.librarian = QLibrarian()
 
         # Define some useful objects
         design = self.analysis.sim.design
@@ -71,37 +70,34 @@ class QSweeper:
             data = run_analysis(data_name, **kwargs)
 
             # Log QComponent.options and data from analysis
-            Librarian.from_dict(component.options, 'qoption')
-            Librarian.from_dict(data, 'simulation')
+            self.librarian.from_dict(component.options, 'qoption')
+            self.librarian.from_dict(data, 'simulation')
 
             # Save this data to a csv
-            Librarian.write_csv(filepath = save_path, mode='a')
+            self.librarian.write_csv(filepath = save_path, mode='a')
 
             # Tell me what you finished
             print('Simulated and logged configuration: {}'.format(combo_parameter))
 
             # Append full result to QSweeper.full_simulations
             self.full_simulations.append(self.analysis)
-        
-        
-        self.simulation_Librarian = Librarian
 
-        return Librarian
+        return self.librarian
             
 
     # TODO: Might be able to get rid of these, but not sure yet...
     def run_LOManlaysis(self, data_name, **kwargs):
-        all_data = self.analysis.get_data()
+        all_data = self.analysis.get_data(data_name)
         return all_data
     
     def run_EPRanlaysis(self, data_name, **kwargs):
         self.analysis.sim.run(**kwargs)
         self.analysis.run_epr()
-        all_data = self.analysis.get_data()
+        all_data = self.analysis.get_data(data_name)
         return all_data
     
     def run_ScatteringImpedanceSim(self, data_name, **kwargs):
-        all_data = self.analysis.get_data()
+        all_data = self.analysis.get_data(data_name)
         return all_data
 
     def update_qcomponent(self, qcomponent_options: dict, dictionary):
