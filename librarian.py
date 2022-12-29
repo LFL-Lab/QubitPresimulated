@@ -16,6 +16,7 @@ class QLibrarian:
     def __init__(self):
         self.qoptions_data = pd.DataFrame()
         self.simulation_data = pd.DataFrame()
+        self.default_save_directory = 'QubitPresimulated/draft_presimulated/'
     
 
     #### Section 1: Using your data to do things!
@@ -151,7 +152,7 @@ class QLibrarian:
             if not os.path.exists(self.default_save_directory):
                 os.mkdir(self.default_save_directory)
     
-            file_path = self.default_save_directory + 'QubitPresimulated/draft_presimulated/draft_{date_string}.csv'
+            file_path = self.default_save_directory + 'draft_{date_string}.csv'
         
         # Combine the two DataFrames and add an empty column between them
         combined_df = pd.concat([self.qoptions_data, pd.DataFrame(columns=[' ']), self.simulation_data], axis=1)
