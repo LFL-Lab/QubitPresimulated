@@ -47,13 +47,16 @@ class QLibrarian:
     #### Section 2: Gathering data 
 
     # Append qcomponent.options to self.qoptions_data
-    def from_dict(self, dictionary, df):
+    def from_dict(self, dictionary, target_df='qoption'):
         '''
         Get data in the format of QComponent.options
         Append it to a pandas DataFrame
         
         Input: 
         * dictionary
+        * target_df (string) - 
+            - 'qoption'
+            - 'simulation'
 
         Output:
         Appends dictionary to DataFrame.
@@ -61,8 +64,11 @@ class QLibrarian:
         Entries below each column are associated w/ the deepest value of the nested dict.
         '''
         keys, values = self.extract_keysvalues(dictionary)
-        df = df.append(dict(zip(keys, values)), ignore_index=True)
-
+        if (target_df == 'qoption'):
+            self.qoptions_data = self.qoptions_data.append(dict(zip(keys, values)), ignore_index=True)
+        else:
+            self.simulation_data = self.simulation_data.append(dict(zip(keys, values)), ignore_index=True)
+        
     def extract_keysvalues(self, dictionary, parent_key=''):
         '''
         Helper method for self.from_dict
