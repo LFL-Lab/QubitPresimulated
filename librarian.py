@@ -129,7 +129,7 @@ class QLibrarian:
         self.qoptions_data = combined_df.iloc[:, :combined_df.columns.get_loc(' ')]
         self.simulation_data = combined_df.iloc[:, combined_df.columns.get_loc(' ')+1:]
     
-    def write_csv(self, filepath=None, mode='a', **kwargs):
+    def write_csv(self, file_path=None, mode='a', **kwargs):
         '''
         Write self.qoptions_data and self.simulation_data to .csv
         Defaults to ./draft_presimulated
