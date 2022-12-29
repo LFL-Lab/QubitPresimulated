@@ -165,13 +165,21 @@ class QLibrarian:
         combined_df.to_csv(filepath, index=False, mode=mode, **kwargs)
 
     @staticmethod
-    def append_csv(qoption_data, simulation_data, filepath=None):
+    def append_csv(qoption_data: dict, simulation_data: dict, filepath=None):
         '''
         Static verison of `self.write_csv`
 
         Usage: when you want to append one line of data at a time
-            to long term storage (.csv)
+            to long term storage (.csv) located at `filepath`
+        
+        Inputs:
+        * qoption_data (dict)
+        * simulation_data (dict)
         '''
+        # Turn inputs into pd.DataFrames
+        qoption_data = pd.DataFrame(qoption_data)
+        simulation_data = pd.DataFrame(simulation_data)
+
         # Default to date & time name
         if (filepath == None):
             now = datetime.datetime.now()
