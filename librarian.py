@@ -135,8 +135,8 @@ class QLibrarian:
         combined_df = pd.read_csv(filepath)
         
         # Split the combined DataFrame into the two separate DataFrames
-        self.qoptions_data = combined_df.iloc[:, :combined_df.columns.get_loc(' ')]
-        self.simulations_data = combined_df.iloc[:, combined_df.columns.get_loc(' ')+1:]
+        self.qoptions_data = combined_df.iloc[:, :combined_df.columns.get_loc('__SPLITTER__')]
+        self.simulations_data = combined_df.iloc[:, combined_df.columns.get_loc('__SPLITTER__')+1:]
 
         return combined_df
     
@@ -159,7 +159,7 @@ class QLibrarian:
             filepath = 'testing_{date_string}.csv'
         
         # Combine the two DataFrames and add an empty column between them
-        combined_df = pd.concat([self.qoptions_data, pd.DataFrame(columns=[' ']), self.simulations_data], axis=1)
+        combined_df = pd.concat([self.qoptions_data, pd.DataFrame(columns=['__SPLITTER__']), self.simulations_data], axis=1)
         
         # Write the combined DataFrame to a CSV file
         combined_df.to_csv(filepath, index=False, mode=mode, **kwargs)
@@ -184,7 +184,7 @@ class QLibrarian:
             filepath = 'testing_{date_string}.csv'
         
         # Combine the two DataFrames and add an empty column between them
-        combined_df = pd.concat([qoption_data, pd.DataFrame(columns=[' ']), simulation_data], axis=1)
+        combined_df = pd.concat([qoption_data, pd.DataFrame(columns=['__SPLITTER__']), simulation_data], axis=1)
         
         # Write the combined DataFrame to a CSV file
         combined_df.to_csv(filepath, index=False, mode='a', header=False)
