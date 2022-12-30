@@ -1,8 +1,8 @@
 # QubitPresimulated
-Library of premade qubits made in Qiskit Metal. Ask for a set of target parameters, and we'll give you a few close choices.
+Library of modular pre-designed superconducting Qubits using Qiskit Metal. Speed up your the design and simulation phase of fabrication. Ask for a set of target parameters, and we'll give you a few close choices.
 
 ## Instalation
-Must have `qiskit-metal` installed.
+Must have `qiskit-metal` by IBM Quantum installed.
 
 ## Usage
 See tutorials for the full story. But here's some pseduo-code if you're in a rush.
