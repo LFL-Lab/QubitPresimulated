@@ -135,8 +135,8 @@ class QLibrarian:
         combined_df = pd.read_csv(filepath)
         
         # Split the combined DataFrame into the two separate DataFrames
-        QLibrarian.qoptions_data = combined_df.iloc[:, :combined_df.columns.get_loc(' ')]
-        QLibrarian.simulations_data = combined_df.iloc[:, combined_df.columns.get_loc(' ')+1:]
+        self.qoptions_data = combined_df.iloc[:, :combined_df.columns.get_loc(' ')]
+        self.simulations_data = combined_df.iloc[:, combined_df.columns.get_loc(' ')+1:]
 
         return combined_df
     
