@@ -139,7 +139,8 @@ class QLibrarian:
             self.qoptions_data = combined_df.iloc[:, :combined_df.columns.get_loc('__SPLITTER__')]
             self.simulations_data = combined_df.iloc[:, combined_df.columns.get_loc('__SPLITTER__')+1:]
         except KeyError:
-            print('ERROR: There are no columns in your `.csv`. This came from saving to a new file.')
+            print("""ERROR: There are no columns in your `.csv`. This error probably came from using QLibrarian.append_csv() to make a new file.
+                     Data won't be formatted properly. """)
         return combined_df
     
     def export_csv(self, filepath=None, mode='a', **kwargs):
