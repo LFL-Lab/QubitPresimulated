@@ -135,9 +135,11 @@ class QLibrarian:
         combined_df = pd.read_csv(filepath)
         
         # Split the combined DataFrame into the two separate DataFrames
-        self.qoptions_data = combined_df.iloc[:, :combined_df.columns.get_loc('__SPLITTER__')]
-        self.simulations_data = combined_df.iloc[:, combined_df.columns.get_loc('__SPLITTER__')+1:]
-
+        try:
+            self.qoptions_data = combined_df.iloc[:, :combined_df.columns.get_loc('__SPLITTER__')]
+            self.simulations_data = combined_df.iloc[:, combined_df.columns.get_loc('__SPLITTER__')+1:]
+        except KeyError:
+            print('ERROR: There are no columns in your `.csv`. This came from saving to a new file.')
         return combined_df
     
     def export_csv(self, filepath=None, mode='a', **kwargs):
