@@ -1,0 +1,5 @@
+pos_x,pos_y,orientation,chip,layer,cross_width,cross_length,cross_gap,hfss_inductance,hfss_capacitance,hfss_resistance,hfss_mesh_kw_jj,q3d_inductance,q3d_capacitance,q3d_resistance,q3d_mesh_kw_jj,gds_cell_name,__SPLITTER__,energy_elec,energy_elec_sub,energy_mag
+0.0um,0.0um,0.0,main,1,10um,150um,20um,10nH,0,0,7e-06,10nH,0,0,7e-06,my_other_junction,,8.21187825603725e-25,7.53621285742723e-25,8.05515568554797e-27
+0.0um,0.0um,0.0,main,1,10um,350um,20um,10nH,0,0,7e-06,10nH,0,0,7e-06,my_other_junction,,4.10844188585681e-24,3.7295880377881e-24,8.07245764588963e-26
+0.0um,0.0um,0.0,main,1,30um,150um,20um,10nH,0,0,7e-06,10nH,0,0,7e-06,my_other_junction,,1.15581641242658e-24,1.06194122044801e-24,8.52048595153468e-27
+0.0um,0.0um,0.0,main,1,30um,350um,20um,10nH,0,0,7e-06,10nH,0,0,7e-06,my_other_junction,,5.1565587156194e-24,4.73152832513243e-24,7.90374346227157e-26
