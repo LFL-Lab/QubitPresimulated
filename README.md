@@ -5,7 +5,6 @@ Library of premade qubits made in Qiskit Metal. Ask for a set of target paramete
 See tutorials for the full story. But here's some pseduo-code if you're in a rush.
 ```
 # Run a sweep
-
 analyzer = QAnalysis
 parameters_to_sweep = dict() # in structure of QComponent.options
 component_name = QComponent.name
