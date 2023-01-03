@@ -48,7 +48,7 @@ class QSweeper:
         self.librarian = QLibrarian()
 
         # Allow Ansys to manipulate geometry of design
-        self.sim.setup.reuse_selected_design = False
+        self.analysis.sim.setup.reuse_selected_design = False
 
         # Define some useful objects
         design = self.analysis.sim.design
