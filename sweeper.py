@@ -13,14 +13,17 @@ class QSweeper:
     def __init__(self, analysis,):
         self.analysis = analysis
         
-    def run_sweep(self, component_name: str, parameters: dict, data_name: str = None, save_path = None, **kwargs):
+    def run_sweep(self, component_name: str, parameters: dict, components_to_render: list = [], 
+                  data_name: str = None, save_path = None, **kwargs):
         """
-        Runs self.analysis.run_sweep() for all combinations of the options and values in the `parameters` dictionary.
+        Clears self.librarian and runs self.analysis.run_sweep() for all combinations of the options and values in the `parameters` dictionary.
 
         Inputs:
         * component_name (str) - The name of the component to run the sweep on.
         * parameters (dict) - A dictionary of options and their corresponding values. 
             The keys are the options (strings), and the values are lists of floats.
+        * components_to_render (list of strings, optional) - names of components to render in simulation
+            Defaults to rendering all components
         * data_name (str, optional) - Label to query for data. If not specified, the entire
             dictionary is returned. Defaults to None.
         * kwargs - parameters associated w/ QAnalysis.run()
@@ -43,6 +46,9 @@ class QSweeper:
 
         # Clear simulations library
         self.librarian = QLibrarian()
+
+        # Allow Ansys to manipulate geometry of design
+        self.sim.setup.reuse_selected_design = False
 
         # Define some useful objects
         design = self.analysis.sim.design
@@ -67,7 +73,7 @@ class QSweeper:
             design.rebuild()
 
             # Run the analysis, extract important data
-            data = run_analysis(data_name, **kwargs)
+            data = run_analysis(components_to_render, data_name, **kwargs)
 
             # Log QComponent.options and data from analysis
             self.librarian.from_dict(component.options, 'qoption')
@@ -88,19 +94,23 @@ class QSweeper:
 
         return self.librarian
             
+    def run_LOManlaysis(self, components_to_render, data_name, **kwargs):
+        self.analysis.run(components = components_to_render, **kwargs)
+        self.analysis.run_lom()
 
-    # TODO: Might be able to get rid of these, but not sure yet...
-    def run_LOManlaysis(self, data_name, **kwargs):
-        all_data = self.analysis.get_data(data_name)
-        return all_data
+        lom_all = self.lumped_oscillator_all.tail(1) # Get most accurate LOM analysis
+        cap_matrix = self.analysis.sim.capacitance_matrix # Get capacitance matrix
+        
+        lom_all['cap_matrix'] = cap_matrix
+        return lom_all
     
-    def run_EPRanlaysis(self, data_name, **kwargs):
-        self.analysis.sim.run(**kwargs)
+    def run_EPRanlaysis(self, components_to_render, data_name, **kwargs):
+        self.analysis.sim.run(components = components_to_render, **kwargs)
         self.analysis.run_epr()
         all_data = self.analysis.get_data(data_name)
         return all_data
     
-    def run_ScatteringImpedanceSim(self, data_name, **kwargs):
+    def run_ScatteringImpedanceSim(self, components_to_render, data_name, **kwargs):
         all_data = self.analysis.get_data(data_name)
         return all_data
 
