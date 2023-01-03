@@ -1,5 +1,4 @@
 import subprocess
-import os
 
 def acp(target_file: str, message: str = None, directory: str = None):
     '''
@@ -10,6 +9,7 @@ def acp(target_file: str, message: str = None, directory: str = None):
     * message (str, optional) - inputs into -m 'message'
         Correct usage (include inner quotations)
         message = '"Updated file."'
+    * directory (str, optional) - defaults to not specifying directory `git push`
     '''
     # Add the .csv file to the staging area
     subprocess.run(['git', 'add', target_file])
@@ -21,5 +21,5 @@ def acp(target_file: str, message: str = None, directory: str = None):
 
     # Push the changes to the remote repository
     if (directory == None):
-        directory = 'master'
+        subprocess.run(['git', 'push'])
     subprocess.run(['git', 'push', 'origin', directory])
