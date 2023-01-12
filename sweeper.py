@@ -13,7 +13,7 @@ class QSweeper:
     def __init__(self, analysis,):
         self.analysis = analysis
         
-    def run_sweep(self, component_name: str, parameters: dict, data_name: str = None, save_path = None, **kwargs):
+    def run_sweep(self, component_name: str, parameters: dict, custom_analysis = None, save_path = None, **kwargs):
         """
         Runs self.analysis.run_sweep() for all combinations of the options and values in the `parameters` dictionary.
 
@@ -21,8 +21,9 @@ class QSweeper:
         * component_name (str) - The name of the component to run the sweep on.
         * parameters (dict) - A dictionary of options and their corresponding values. 
             The keys are the options (strings), and the values are lists of floats.
-        * data_name (str, optional) - Label to query for data. If not specified, the entire
-            dictionary is returned. Defaults to None.
+        * custom_analysis (func (QAnalysis) -> dict, optional) - Create a custom analyzer to
+            parse data! See self.run_EPRanalysis, self.run_LOManalysis, self.runScatteringImpedanceSim
+            for examples.
         * kwargs - parameters associated w/ QAnalysis.run()
         
         Output:
@@ -49,15 +50,18 @@ class QSweeper:
         component = design.components[component_name]
         all_combo_parameters = extract_QSweep_parameters(parameters)
 
-        # Select a analysis type
-        if (type(self.analysis) == LOManalysis):
-            run_analysis = self.run_LOManlaysis
-        elif (type(self.analysis) == EPRanalysis):
-            run_analysis = self.run_EPRanlaysis
-        elif (type(self.analysis) == ScatteringImpedanceSim):
-            run_analysis = self.run_ScatteringImpedanceSim
+        # Select a simulator type
+        if custom_analysis != None:
+            run_analysis = custom_analysis
         else:
-            raise ValueError('Analysis type is not currently supported.')
+            if (type(self.analysis) == LOManalysis):
+                run_analysis = self.run_LOManlaysis
+            elif (type(self.analysis) == EPRanalysis):
+                run_analysis = self.run_EPRanlaysis
+            elif (type(self.analysis) == ScatteringImpedanceSim):
+                run_analysis = self.run_ScatteringImpedanceSim
+            else:
+                raise ValueError('Analysis type is not currently supported.')
         
 
         # Get all combinations of the options and values, w/ `tqdm` progress bar
@@ -67,15 +71,15 @@ class QSweeper:
             design.rebuild()
 
             # Run the analysis, extract important data
-            data = run_analysis(data_name, **kwargs)
+            data = run_analysis(**kwargs)
 
             # Log QComponent.options and data from analysis
             self.librarian.from_dict(component.options, 'qoption')
             self.librarian.from_dict(data, 'simulation')
 
             # Save this data to a csv
-            newest_qoption = self.librarian.qoptions_data.tail(n=1)
-            newest_simulation = self.librarian.simulations_data.tail(n=1)
+            newest_qoption = self.librarian.qoptions.tail(n=1)
+            newest_simulation = self.librarian.simulations.tail(n=1)
             
             QLibrarian.append_csv(newest_qoption, newest_simulation, filepath = save_path)
 
@@ -88,8 +92,6 @@ class QSweeper:
 
         return self.librarian
             
-
-    # TODO: Might be able to get rid of these, but not sure yet...
     def run_LOManlaysis(self, data_name, **kwargs):
         all_data = self.analysis.get_data(data_name)
         return all_data

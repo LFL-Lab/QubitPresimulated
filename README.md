@@ -16,8 +16,8 @@ sweeper = QSweeper(QAnalysis)
 sweeper.run_sweep(component_name, parameter_to_sweep, etc.)
 
 # See results
-print(sweeper.librarian.qoptions_data)
-print(sweeper.librarian.simulations_data)
+print(sweeper.librarian.qoptions)
+print(sweeper.librarian.simulations)
 ```
 
 # To Do
