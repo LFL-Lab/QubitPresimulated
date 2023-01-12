@@ -95,10 +95,15 @@ class QSweeper:
         return all_data
     
     def run_EPRanlaysis(self, data_name, **kwargs):
-        self.analysis.sim.run(**kwargs)
-        self.analysis.run_epr()
-        all_data = self.analysis.get_data(data_name)
-        return all_data
+        try:
+            self.analysis.sim.run(**kwargs)
+            self.analysis.run_epr()
+        except:
+            pass
+        
+        results = self.analysis.sim.renderer.epr_quantum_analysis.results['0']
+    
+        return results
     
     def run_ScatteringImpedanceSim(self, data_name, **kwargs):
         all_data = self.analysis.get_data(data_name)

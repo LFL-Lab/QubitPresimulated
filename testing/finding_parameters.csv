@@ -1,0 +1,58 @@
+0.0um,0.0um,0.0,main,1,15um,200um,30um,5um,25um,cpw_width,cpw_gap,100um,5um,65um,1.0,1.0,30um,20um,425 um,90um,650um,650um,0.0,0.0,10nH,0.0,0.0,7e-06,10nH,0.0,0.0,7e-06,my_other_junction,,"0    6049.509517
+1    8887.073683
+Name: 0, dtype: float64","0    5746.006056
+1    8885.698915
+dtype: float64","0    5728.670118
+1    8885.765618
+dtype: float64","            0         1
+0  302.134893  2.737137
+1    2.737137  0.006199","            0         1
+0  338.694868  2.268713
+1    2.268713  0.004322","[[0.44905756]
+ [0.03022281]]","[[0.99068751]
+ [0.00305467]]","0    0.875517
+1    0.003055
+Name: jj, dtype: float64","modes
+0    1.131546
+1    1.045867
+dtype: float64","modes
+0    1.145250
+1    0.333519
+dtype: float64","_Cj     0fF
+_Lj    11nH
+Name: 0, dtype: object","jj    1.100000e-08
+Name: 0, dtype: float64","jj    2.000000e-15
+Name: 0, dtype: float64","Empty DataFrame
+Columns: []
+Index: [0, 1]","0    inf
+1    inf
+Name: 0, dtype: float64",7.0,8.0
+0.0um,0.0um,0.0,main,1,15um,200um,30um,5um,25um,cpw_width,cpw_gap,100um,5um,65um,1.0,1.0,30um,20um,425 um,135um,650um,650um,0.0,0.0,10nH,0.0,0.0,7e-06,10nH,0.0,0.0,7e-06,my_other_junction,,"0    5625.490630
+1    9068.177289
+Name: 0, dtype: float64","0    5363.041775
+1    9067.311583
+dtype: float64","0    5349.299028
+1    9067.330974
+dtype: float64","            0         1
+0  261.585995  1.725720
+1    1.725720  0.002846","            0         1
+0  290.675807  1.545673
+1    1.545673  0.002248","[[0.43316705]
+ [0.02487817]]","[[0.99129576]
+ [0.00202847]]","0    0.879353
+1    0.002028
+Name: jj, dtype: float64","modes
+0    1.127302
+1    1.085079
+dtype: float64","modes
+0    1.404903
+1    0.188651
+dtype: float64","_Cj     0fF
+_Lj    11nH
+Name: 0, dtype: object","jj    1.100000e-08
+Name: 0, dtype: float64","jj    2.000000e-15
+Name: 0, dtype: float64","Empty DataFrame
+Columns: []
+Index: [0, 1]","0    inf
+1    inf
+Name: 0, dtype: float64",7.0,8.0
